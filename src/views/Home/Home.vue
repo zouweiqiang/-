@@ -48,21 +48,31 @@
       </el-row>
 
       <el-card shadow="hover" style="height: 300px">
-        <div style="height: 300px" ref="echart"></div>
+        <echart :chartData="echartData.order" style="height: 300px"></echart>
       </el-card>
       <div class="graph">
-        <el-card shadow="hover" style="height: 300px"></el-card>
-        <el-card shadow="hover" style="height: 300px"></el-card>
+        <el-card shadow="hover" style="height: 300px">
+          <echart :chartData="echartData.user" style="height: 280px"></echart>
+        </el-card>
+        <el-card shadow="hover" style="height: 300px">
+          <echart
+            :chartData="echartData.video"
+            style="height: 280px"
+            :isAxisChart="false"
+          ></echart>
+        </el-card>
       </div>
     </el-col>
   </el-row>
 </template>
 
 <script>
-import { getMenu } from "../../api/data";
 import { getHome } from "../../api/data";
-import * as echarts from "echarts";
+import Echart from "@/components/ECharts";
 export default {
+  components: {
+    Echart,
+  },
   data() {
     return {
       userImage: require("../../assets/logo.png"),
@@ -105,50 +115,16 @@ export default {
           color: "#2ec7c9",
         },
       ],
-      echartsData: {
+      echartData: {
         order: {
-          legend: {
-            textStyle: {
-              color: "#333",
-            },
-          },
-          grid: {
-            left: "20%",
-          },
-          tooltip: {
-            trigger: "axis",
-          },
-          xAxis: {
-            type: "category",
-            data: [],
-            axisLine: {
-              lineStyle: {
-                color: "#17b323",
-              },
-            },
-            axisLabel: {
-              interval: 0,
-              color: "#333",
-            },
-          },
-          yAxis: [
-            {
-              type: "value",
-              axisLine: {
-                lineStyle: {
-                  color: "#17b334",
-                },
-              },
-            },
-          ],
-          color: [
-            "#2e41a2",
-            "#b5a234",
-            "#5ab345",
-            "#ffb234",
-            "#d87234",
-            "#8d9234",
-          ],
+          xData: [],
+          series: [],
+        },
+        user: {
+          xData: [],
+          series: [],
+        },
+        video: {
           series: [],
         },
       },
@@ -157,31 +133,46 @@ export default {
   methods: {
     getTableData() {
       getHome().then((res) => {
-        // console.log(res);
         this.tableData = res.data.tableData;
 
         //折线图展示
         const order = res.data.orderData;
-        console.log(order);
-        this.echartsData.order.xAxis.data = order.date;
-        let keyArray = Object.keys(order.data[0])
-        keyArray.forEach((key)=>{
-          this.echartsData.order.series.push({
-            name:key,
-            data: order.data.map((itme)=>itme[key]),
-            type:"line"
-          })
-        })
-        const myEchartsOrder = echarts.init(this.$refs.echart);
-        myEchartsOrder.setOption(this.echartsData.order)
+        let keyArray = Object.keys(order.data[0]);
+
+        //传组件值
+        this.echartData.order.xData = order.date;
+        keyArray.forEach((key) => {
+          this.echartData.order.series.push({
+            name: key,
+            data: order.data.map((itme) => itme[key]),
+            type: "line",
+          });
+        });
+
+        //柱状图图展示
+
+        (this.echartData.user.xData = res.data.userData.map(
+          (itme) => itme.date
+        )),
+          this.echartData.user.series.push({
+            name: "新增用户",
+            data: res.data.userData.map((itme) => itme.new),
+            type: "bar",
+          });
+        this.echartData.user.series.push({
+          name: "活跃用户",
+          data: res.data.userData.map((itme) => itme.active),
+          type: "bar",
+        });
+
+        this.echartData.video.series.push({
+          data: res.data.videoData,
+          type: "pie",
+        });
       });
     },
   },
   mounted() {
-    // getMenu().then((res)=>{
-    //   console.log(res);
-    // })
-
     this.getTableData();
   },
 };
