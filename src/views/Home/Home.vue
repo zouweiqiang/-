@@ -150,9 +150,8 @@ export default {
         });
 
         //柱状图图展示
-
         (this.echartData.user.xData = res.data.userData.map(
-          (itme) => itme.date
+          (itme) => itme.data
         )),
           this.echartData.user.series.push({
             name: "新增用户",

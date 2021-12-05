@@ -6,8 +6,10 @@
     text-color="#fff"
     active-text-color="#ffd045"
   >
-    <h3 style="color:#fff;text-align: center;" v-show="!isCollapse">通用后台管理系统</h3>
-    <h3 style="color:#fff;text-align: center;" v-show="isCollapse">通用</h3>
+    <h3 style="color: #fff; text-align: center" v-show="!isCollapse">
+      通用后台管理系统
+    </h3>
+    <h3 style="color: #fff; text-align: center" v-show="isCollapse">通用</h3>
 
     <el-menu-item
       :index="item.path"
@@ -41,17 +43,14 @@
       </el-menu-item-group>
     </el-submenu>
 
-    <!-- <el-menu-item index="4">
-      <i class="el-icon-setting"></i>
-      <span slot="title">导航四</span>
-    </el-menu-item> -->
   </el-menu>
 </template>
 
 <style>
 .el-menu-vertical-demo:not(.el-menu--collapse) {
   width: 200px;
-  min-height: 100%;
+  /* min-height: 100%; */
+  height: 910px;
 }
 </style>
 
@@ -112,9 +111,10 @@ export default {
     // handleClose(key, keyPath) {
     //   console.log(key, keyPath);
     // },
-    clickMenu(item){
-      this.$router.push({ name: item.name })
-    }
+    clickMenu(item) {
+      this.$router.push({ name: item.name });
+      this.$store.commit("selectMenu", item);
+    },
   },
   computed: {
     noChildren() {
@@ -123,9 +123,9 @@ export default {
     hasChildren() {
       return this.menu.filter((item) => item.children);
     },
-    isCollapse(){
+    isCollapse() {
       return this.$store.state.tab.isCollapse;
-    }
+    },
   },
 };
 </script>

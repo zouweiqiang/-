@@ -23,7 +23,10 @@ import {
   col,
   card,
   table,
-  tableColumn
+  tableColumn,
+  breadcrumb,
+  breadcrumbItem,
+  tag
 
 } from 'element-ui';
 
@@ -51,6 +54,9 @@ Vue.use(col)
 Vue.use(card)
 Vue.use(table)
 Vue.use(tableColumn)
+Vue.use(breadcrumb)
+Vue.use(breadcrumbItem)
+Vue.use(tag)
 
 Vue.prototype.$http = http
 

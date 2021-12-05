@@ -7,6 +7,7 @@
       <el-header>
         <commen-header></commen-header>
       </el-header>
+      <commen-tag></commen-tag>
       <el-main><router-view /></el-main>
     </el-container>
   </el-container>
@@ -17,12 +18,14 @@
 
 import CommenAside from "../components/CommenAside.vue";
 import CommenHeader from "../components/CommenHeader.vue";
+import CommenTag from "../components/CommenTag";
 
 export default {
   name: "Main",
   components: {
     CommenAside,
     CommenHeader,
+    CommenTag
   },
 };
 </script>
